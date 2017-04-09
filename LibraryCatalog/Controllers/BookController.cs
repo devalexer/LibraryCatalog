@@ -14,7 +14,9 @@ namespace LibraryCatalog.Controllers
 
         static private List<BookInfo> BookInfo { get; set; } = new List<BookInfo>
         {
-            new BookInfo { Title = "Where the Sidewalk Ends", Author = "Roald Dahl", YearPublished = 1979, Genre = "Childrens", IsCheckedOut = false }
+            new BookInfo { Id = 1, Title = "Where the Sidewalk Ends", Author = "Roald Dahl", YearPublished = 1979, Genre = "Childrens", IsCheckedOut = false },
+            new BookInfo { Id = 2, Title = "Never Without You", Author = "Dunno", YearPublished = 1979, Genre = "Childrens", IsCheckedOut = false },
+            new BookInfo { Id = 3, Title = "Goodnight Moon", Author = "Diff Person", YearPublished = 1979, Genre = "Childrens", IsCheckedOut = false }
         };
 
         const string ConnectionString = @"Server=localhost\SQLEXPRESS;Database=BookCollection;Trusted_Connection=True;";
@@ -26,29 +28,67 @@ namespace LibraryCatalog.Controllers
         }
 
         [HttpGet]
-        public BookInfo GetBook(int title)
+        public IHttpActionResult GetBook(int id)
         {
-            return new BookInfo();
+            var book = BookInfo.FirstOrDefault(f => f.Id == id);
+            if (book == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+            return Ok(book);
+            }
         }
 
         [HttpPut]
-        public BookInfo AddBook([FromBody] BookInfo book)
+        public IHttpActionResult AddBook([FromBody] BookInfo book)
         {
-            return new BookInfo();
+            var newId = BookInfo.Max(m => m.Id);
+            if (book != null && !String.IsNullOrEmpty(book.Title))
+            {
+                book.Id = newId++;
+                BookInfo.Add(book);
+                return Ok(book);
+            }
+            else
+            {
+                return Ok(new { Message = "No book was given, nothing changed" });
+            }
         }
 
         [HttpPost]
-        public BookInfo UpdateBook([FromBody] BookInfo book)
+        public IHttpActionResult UpdateBook([FromUri]int id, [FromBody] BookInfo book)
         {
-            return new BookInfo();
+            var oldBook = BookInfo.FirstOrDefault(f => f.Id == id);
+            if (oldBook == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                BookInfo.Remove(oldBook);
+                BookInfo.Add(book);
+                return Ok(book);
+            }
         }
 
         [HttpDelete]
-        public IHttpActionResult DeleteBook(int book)
+        public IHttpActionResult DeleteBook(int id)
         {
-            return Ok();
+            var oldBook = BookInfo.FirstOrDefault(b => b.Id == id);
+            if (oldBook == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                BookInfo.Remove(oldBook);
+                return Ok();
+            }
         }
 
+      
         //[HttpGet]
         //public IEnumerable<BookInfo> GetAllBooks()
         //{
@@ -78,33 +118,6 @@ namespace LibraryCatalog.Controllers
         //    }
         //    return rv;
         //}
-
-
-        //// GET: api/Book
-        //public IEnumerable<string> Get()
-        //{
-        //    return new string[] { "value1", "value2" };
-        //}
-
-        //// GET: api/Book/5
-        //public string Get(int id)
-        //{
-        //    return "value";
-        //}
-
-        //// POST: api/Book
-        //public void Post([FromBody]string value)
-        //{
-        //}
-
-        //// PUT: api/Book/5
-        //public void Put(int id, [FromBody]string value)
-        //{
-        //}
-
-        //// DELETE: api/Book/5
-        //public void Delete(int id)
-        //{
-        //}
+        
     }
 }
