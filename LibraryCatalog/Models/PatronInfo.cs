@@ -5,7 +5,9 @@ using System.Web;
 
 namespace LibraryCatalog.Models
 {
-    public class CheckOut
+    public class PatronInfo
     {
+        public int Id { get; set; }
+        public string Name { get; set; }
     }
 }

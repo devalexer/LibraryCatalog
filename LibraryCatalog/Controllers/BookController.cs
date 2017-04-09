@@ -14,18 +14,45 @@ namespace LibraryCatalog.Controllers
 
         static private List<BookInfo> BookInfo { get; set; } = new List<BookInfo>
         {
-            new BookInfo { Id = 1, Title = "Where the Sidewalk Ends", Author = "Roald Dahl", YearPublished = 1979, Genre = "Childrens", IsCheckedOut = false },
-            new BookInfo { Id = 2, Title = "Never Without You", Author = "Dunno", YearPublished = 1979, Genre = "Childrens", IsCheckedOut = false },
-            new BookInfo { Id = 3, Title = "Goodnight Moon", Author = "Diff Person", YearPublished = 1979, Genre = "Childrens", IsCheckedOut = false }
+            new BookInfo { Id = 1, Title = "Where the Sidewalk Ends", Author = "Roald Dahl", YearPublished = 1979, Genre = "Childrens" },
+            new BookInfo { Id = 2, Title = "Never Without You", Author = "Dunno", YearPublished = 1979, Genre = "Childrens" },
+            new BookInfo { Id = 3, Title = "Goodnight Moon", Author = "Diff Person", YearPublished = 1979, Genre = "Childrens" }
         };
 
         const string ConnectionString = @"Server=localhost\SQLEXPRESS;Database=BookCollection;Trusted_Connection=True;";
 
+        //[HttpGet]
+        //public IEnumerable<BookInfo> GetAllBooks()
+        //{
+        //    return BookInfo;
+        //}
+
         [HttpGet]
         public IEnumerable<BookInfo> GetAllBooks()
         {
-            return BookInfo;
+            var rv = new List<BookInfo>();
+            using (var connection = new SqlConnection(ConnectionString))
+            {
+                var query = "SELECT * FROM Books ORDER BY Title";
+                var cmd = new SqlCommand(query, connection);
+                connection.Open();
+                var reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    rv.Add(new BookInfo
+                    {
+                        Id = (int)reader["Id"],
+                        Title = reader["Title"].ToString(),
+                        Author = reader["Author"].ToString(),
+                        YearPublished = (int?)reader["YearPublished"],
+                        Genre = reader["Genre"].ToString(),
+                    });
+                }
+                connection.Close();
+            }
+            return rv;
         }
+
 
         [HttpGet]
         public IHttpActionResult GetBook(int id)
@@ -40,6 +67,7 @@ namespace LibraryCatalog.Controllers
             return Ok(book);
             }
         }
+
 
         [HttpPut]
         public IHttpActionResult AddBook([FromBody] BookInfo book)
@@ -57,6 +85,7 @@ namespace LibraryCatalog.Controllers
             }
         }
 
+
         [HttpPost]
         public IHttpActionResult UpdateBook([FromUri]int id, [FromBody] BookInfo book)
         {
@@ -73,6 +102,7 @@ namespace LibraryCatalog.Controllers
             }
         }
 
+
         [HttpDelete]
         public IHttpActionResult DeleteBook(int id)
         {
@@ -87,37 +117,5 @@ namespace LibraryCatalog.Controllers
                 return Ok();
             }
         }
-
-      
-        //[HttpGet]
-        //public IEnumerable<BookInfo> GetAllBooks()
-        //{
-        //    var rv = new List<BookInfo>();
-        //    using (var connection = new SqlConnection(ConnectionString))
-        //    {
-        //        var query = "SELECT * FROM Books";
-        //        var cmd = new SqlCommand(query, connection);
-        //        connection.Open();
-        //        var reader = cmd.ExecuteReader();
-        //        while (reader.Read())
-        //        {
-        //            rv.Add(new BookInfo
-        //            {
-        //                Id = (int)reader["Id"],
-        //                Title = reader["Title"].ToString(),
-        //                Author = reader["Author"].ToString(),
-        //                YearPublished = (int)reader["YearPublished"],
-        //                Genre = reader["Genre"].ToString(),
-        //                IsCheckedOut = (bool)reader["IsCheckedOut"],
-        //                LastCheckedOutDate = (DateTime)reader["LastCheckedOutDate"],
-        //                DueBackDate = (DateTime)reader["DueBackDate"],
-        //            });
-        //        }
-
-        //        connection.Close();
-        //    }
-        //    return rv;
-        //}
-        
     }
 }
