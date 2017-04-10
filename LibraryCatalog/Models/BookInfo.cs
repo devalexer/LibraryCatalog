@@ -8,22 +8,23 @@ namespace LibraryCatalog.Models
 {
     public class BookInfo
     {
-        //public BookInfo(SqlDataReader reader)
-        //{
-        //    this.Id = (int)reader["Id"];
-        //    this.Title = reader["Title"].ToString();
-        //}
-
-        //public BookInfo(string title, int id)
-        //{
-        //    this.Title = Title;
-        //    this.Id = id;
-        //}
-
         public int Id { get; set; }
         public string Title { get; set; }
         public string Author { get; set; }
         public int? YearPublished { get; set; }
         public string Genre { get; set; }
+        public bool? IsCheckedOut { get; set; }
+        public DateTime? LastCheckedOutDate { get; set; }
+        public DateTime? DueBackDate { get; set; }
+        public string FriendlyDueBackDate
+        {
+            get
+            {
+                if (DueBackDate.HasValue)
+                    return ((DateTime)this.DueBackDate).ToShortDateString();
+                else
+                    return null;
+            }
+        }
     }
 }

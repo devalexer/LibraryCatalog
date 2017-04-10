@@ -127,67 +127,68 @@ namespace LibraryCatalog.Controllers
             }
         }
 
+
         //WORKING....
 
-            //[HttpGet]
-            //public IHttpActionResult GetBook(int id)
-            //{
-            //    var book = BookInfo.FirstOrDefault(f => f.Id == id);
-            //    if (book == null)
-            //    {
-            //        return NotFound();
-            //    }
-            //    else
-            //    {
-            //        return Ok(book);
-            //    }
-            //}
+        //[HttpGet]
+        //public IHttpActionResult GetBook(int id)
+        //{
+        //    var book = BookInfo.FirstOrDefault(f => f.Id == id);
+        //    if (book == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    else
+        //    {
+        //        return Ok(book);
+        //    }
+        //}
 
-            //[HttpPut]
-            //public IHttpActionResult AddBook([FromBody] BookInfo book)
-            //{
-            //    var newId = BookInfo.Max(m => m.Id);
-            //    if (book != null && !String.IsNullOrEmpty(book.Title))
-            //    {
-            //        book.Id = newId++;
-            //        BookInfo.Add(book);
-            //        return Ok(book);
-            //    }
-            //    else
-            //    {
-            //        return Ok(new { Message = "No book was given, nothing changed" });
-            //    }
-            //}
+        //[HttpPut]
+        //public IHttpActionResult AddBook([FromBody] BookInfo book)
+        //{
+        //    var newId = BookInfo.Max(m => m.Id);
+        //    if (book != null && !String.IsNullOrEmpty(book.Title))
+        //    {
+        //        book.Id = newId++;
+        //        BookInfo.Add(book);
+        //        return Ok(book);
+        //    }
+        //    else
+        //    {
+        //        return Ok(new { Message = "No book was given, nothing changed" });
+        //    }
+        //}
 
-            //[HttpPost]
-            //public IHttpActionResult UpdateBook([FromUri]int id, [FromBody] BookInfo book)
-            //{
-            //    var oldBook = BookInfo.FirstOrDefault(f => f.Id == id);
-            //    if (oldBook == null)
-            //    {
-            //        return NotFound();
-            //    }
-            //    else
-            //    {
-            //        BookInfo.Remove(oldBook);
-            //        BookInfo.Add(book);
-            //        return Ok(book);
-            //    }
-            //}
+        //[HttpPost]
+        //public IHttpActionResult UpdateBook([FromUri]int id, [FromBody] BookInfo book)
+        //{
+        //    var oldBook = BookInfo.FirstOrDefault(f => f.Id == id);
+        //    if (oldBook == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    else
+        //    {
+        //        BookInfo.Remove(oldBook);
+        //        BookInfo.Add(book);
+        //        return Ok(book);
+        //    }
+        //}
 
-            //[HttpDelete]
-            //public IHttpActionResult DeleteBook(int id)
-            //{
-            //    var oldBook = BookInfo.FirstOrDefault(b => b.Id == id);
-            //    if (oldBook == null)
-            //    {
-            //        return NotFound();
-            //    }
-            //    else
-            //    {
-            //        BookInfo.Remove(oldBook);
-            //        return Ok();
-            //    }
-            //}
-        }
+        //[HttpDelete]
+        //public IHttpActionResult DeleteBook(int id)
+        //{
+        //    var oldBook = BookInfo.FirstOrDefault(b => b.Id == id);
+        //    if (oldBook == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    else
+        //    {
+        //        BookInfo.Remove(oldBook);
+        //        return Ok();
+        //    }
+        //}
     }
+}
