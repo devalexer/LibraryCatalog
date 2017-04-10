@@ -61,16 +61,13 @@ namespace LibraryCatalog.Controllers
             }
         }
            
-
-            //Checks In Book
+        //Checks In Book
         [HttpPut]
         public IHttpActionResult CheckInBook(int id)
         {
             using (var connection = new SqlConnection(ConnectionString))
             {
-                var query = @"SELECT IsCheckedOut, DueBackDate 
-                            FROM [dbo].[Books] 
-                              WHERE Id = @Id";
+                var query = @"SELECT IsCheckedOut FROM [Books] WHERE Id = @Id";
 
                 var cmd = new SqlCommand(query, connection);
                 connection.Open();
@@ -81,30 +78,28 @@ namespace LibraryCatalog.Controllers
                 {
                     bookInfo = new BookInfo
                     {
-                        DueBackDate = reader["DueBackDate"] as DateTime?,
                         IsCheckedOut = reader["IsCheckedOut"] as bool?
                     };
                 }
                 connection.Close();
-                if (bookInfo.IsCheckedOut.GetValueOrDefault())
+                if (!bookInfo.IsCheckedOut.GetValueOrDefault())
                 {
-                    return Ok($"This book is already checked out. It is due back on {bookInfo.DueBackDate}.");
+                    return Ok($"This book is already checked in.");
                 }
                 else
                 {
                     var query2 = @"UPDATE [dbo].[Books] 
-                                SET [IsCheckedOut] = @IsCheckedOut, [DueBackDate] = @DueBackDate                  
+                                SET [IsCheckedOut] = @IsCheckedOut                  
                                 WHERE Id = @Id";
 
                     var cmd2 = new SqlCommand(query2, connection);
                     cmd2.Parameters.AddWithValue("@Id", id);
                     cmd2.Parameters.AddWithValue("@IsCheckedOut", true);
-                    cmd2.Parameters.AddWithValue("@DueBackDate", DateTime.Now.AddDays(10));
                     connection.Open();
                     cmd2.ExecuteNonQuery();
                     connection.Close();
 
-                    return Ok($"This book was successfully checked out. It is due back on {bookInfo.DueBackDate}.");
+                    return Ok($"This book was successfully checked back in. Thank you!");
                 }
             }
         }
