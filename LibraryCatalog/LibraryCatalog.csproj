@@ -183,7 +183,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\BookInfo.cs" />
-    <Compile Include="Models\CheckOutInfo.cs" />
+    <Compile Include="Models\TransactionInfo.cs" />
     <Compile Include="Models\PatronInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

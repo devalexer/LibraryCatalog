@@ -95,20 +95,20 @@ namespace LibraryCatalog.Controllers
         {
             using (var connection = new SqlConnection(ConnectionString))
             {
-                var query = @"INSERT INTO[dbo].[Books] ([Title],[Author],[YearPublished],[Genre])
-                              OUTPUT INSERTED.Id                          
-                              VALUES (@Title, @Author, @YearPublished, @Genre)";
+                var query = @"UPDATE [dbo].[Books] 
+                            SET [Title] = @Title,[Author] = @Author,[YearPublished] = @YearPublished,[Genre] = @Genre                  
+                            WHERE Id = @Id";
                 var cmd = new SqlCommand(query, connection);
                 connection.Open();
+                cmd.Parameters.AddWithValue("@Id", book.Id);
                 cmd.Parameters.AddWithValue("@Title", book.Title);
                 cmd.Parameters.AddWithValue("@Author", book.Author);
                 cmd.Parameters.AddWithValue("@YearPublished", book.YearPublished);
                 cmd.Parameters.AddWithValue("@Genre", book.Genre);
-                var newId = cmd.ExecuteScalar();
-                book.Id = (int)newId;
+                var reader = cmd.ExecuteNonQuery();
                 connection.Close();
             }
-            return Ok(book);
+            return Ok($"Book with Id {id} has been updated to {book.Title}");
         }
 
         //Deletes Book From Catalog
@@ -123,7 +123,7 @@ namespace LibraryCatalog.Controllers
                 cmd.ExecuteNonQuery();
                 connection.Close();
 
-                return Ok($"Book with Id '{id}' has been deleted from the catalog");
+                return Ok($"Book with Id {id} has been deleted from the catalog");
             }
         }
 
